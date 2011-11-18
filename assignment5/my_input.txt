@@ -1,0 +1,16 @@
+6
+Aeu B Cute Db E F
+
+11
+B Cute E F Aeu Db
+B F Aeu Cute E Db
+E B F Aeu Cute Db
+B F Db Cute E Aeu
+E F B Db Aeu Cute
+Aeu E F B Db Cute
+Aeu Db B E F Cute
+F Db B Cute Aeu E
+Cute Aeu E F B Db
+Aeu E B Db Cute F
+E Cute B Aeu F Db
+
