@@ -4,7 +4,20 @@
  * Study: Informatica
  *
  * Functionality:
- * The program needs be able to determine a winner using a filewith the votes.
+ * The program needs be able to determine a winner using a file with the votes.
+ * The file must have this exact input format:
+ * (n candidates )
+ * candidate_1 candidate_2 ... candidate_n
+ * (k voters )
+ * choice_1 choice_2 ... choice_n
+ * choice_1 choice_2 ... choice_n
+ * choice_1 choice_2 ... choice_n
+ * ... and so on ( in total k times )
+ *
+ * The program must use this algorithem for determining the winner:
+ * Determine which candidate has the lowest amount of first choices. If there
+ * are multiple check the second choices and so on.
+ * Delete those votes and move the lower votes one up.
  */
 
 import java.io.FileReader;
@@ -18,6 +31,9 @@ public class Assignment5 {
     static IntTable intCandidates;
     static int longestCandidate;
 
+    /*
+     * Main method: Receive the input and call the methods that use it.
+     */
     public static void main(String[] args) {
         if (args.length != 1) {
             System.err.println("Usage: java Assignment5 'filename'");
@@ -41,6 +57,9 @@ public class Assignment5 {
         }
     }
 
+    /*
+     * ReadVoteFile method: Read the vote file and put its contents in tables.
+     */
     public static boolean readVoteFile(String filename){
         Scanner file;
         int voter, candidate;
@@ -125,6 +144,10 @@ public class Assignment5 {
         return true;
     }
 
+    /*
+     * CountVotes method: Count the votes for every candidate and put them in
+     * candidates table.
+     */
     public static void countVotes(){
         intCandidates.initialize();
         for(int i=1; i<candidates.getX()-1; i++){
@@ -142,12 +165,16 @@ public class Assignment5 {
             }
         }
         for(int i=0; i<intCandidates.getY(); i++){
-            candidates.Arr[candidates.getX()-1][i+2] =
+            candidates.Arr[candidates.getX()-1][i+2] = "   " +
                     Integer.toString(intCandidates.rowSum(i));
         }
         candidates.print();
     }
 
+    /*
+     * ChooseLoser method: Find the candidate with the fewest highest votes.
+     * Delete that candidate from both tables.
+     */
     public static boolean chooseLoser(){
         IntArray losers = new IntArray(intCandidates.getY());
         for(int i=0; i<intCandidates.getX(); i++){
@@ -183,6 +210,10 @@ public class Assignment5 {
                 break;
             }
         }
+        /*
+         * If there is less more candidates left than the candidates with the
+         * lowest amount of votes delete those candidates.
+         */
         if(amntLosers < intCandidates.getY()){
             for(int i=amntLosers-1; i>=0; i--){
                 String loser = candidates.Arr[losers.Arr[i] + 1][1];
@@ -198,7 +229,10 @@ public class Assignment5 {
         System.out.println("There are multiple winners.");
         return false;
     }
-    
+
+    /*
+     * MoveVotes method: Remove the loser and shift the lower votes up.
+     */
     public static void moveVotes(String loser){
         for(int i=1; i<votes.getY()-1; i++){
             for(int j=1; j<votes.getX(); j++){
@@ -214,6 +248,10 @@ public class Assignment5 {
 
 }
 
+
+/*
+ * StringArray class: A class that contains a string array.
+ */
 class StringArray {
     String[] Arr;
     int length;
@@ -225,19 +263,42 @@ class StringArray {
         this.length = length;
     }
 
+    /*
+     * StringArray.initialize method: Fill the array with empty strings.
+     */
     void initialize(){
         for(int i=0; i<length; i++){
             Arr[i]="";
         }
     }
+
+    /*
+     * StringArray.print method: Print the array.
+     */
     void print(){
         for(int i=0; i<length; i++){
             System.out.print(Arr[i] + " ");
         }
         System.out.println("\n");
     }
+
+    /*
+     * StringArray.deletLast method: Delete the last value in the array.
+     */
+    void deleteLast(){
+        Arr[length-1] = null;
+        length--;
+    }
+
+    int getLength(){
+        return length;
+    }
 }
 
+/*
+ * IntArray class: The same as the StringArray class, just with arrays of
+ * integers instead of strings.
+ */
 class IntArray {
     int[] Arr;
     private int length;
@@ -273,7 +334,9 @@ class IntArray {
     
 }
 
-
+/*
+ * StringTable class: A class containing a 2D string array.
+ */
 class StringTable {
     String[][] Arr;
     private int x, y;
@@ -286,14 +349,20 @@ class StringTable {
         this.y=y;
     }
 
+    /*
+     * StringTable.initialize method: Fill the table with empty strings.
+     */
     void initialize(){
         for (int i=0; i<y; i++){
             for(int j=0; j<x; j++){
-                Arr[j][i] = " ";
+                Arr[j][i] = "";
             }
         }
     }
 
+    /*
+     * StringTable.print method: Print the table.
+     */
     void print(){
         System.out.println("");
         for (int i=0; i<y; i++){
@@ -305,6 +374,9 @@ class StringTable {
         System.out.println("");
     }
 
+    /*
+     * StringTable.deleteLastRow method: Delete the last row.
+     */
     void deleteLastRow(){
         for(int i=0; i<x; i++){
             Arr[i][y-1]=null;
@@ -312,6 +384,9 @@ class StringTable {
         y--;
     }
 
+    /*
+     * StringTable.deleteLastColumn method: Delete the last column.
+     */
     void deleteLastColumn(){
         for(int i=0; i<y; i++){
             Arr[x-1][i]=null;
@@ -319,6 +394,10 @@ class StringTable {
         x--;
     }
 
+    /*
+     * StringTable.shiftUp method: Move the given value and everything below it
+     * one up.
+     */
     void shiftUp(int xCo, int yCo){
         if(yCo > 0){
             for(int i=yCo; i<y; i++){
@@ -327,6 +406,10 @@ class StringTable {
         }
     }
 
+    /*
+     * StringTable.shiftLeft method: Move the given value and everything right
+     * of it one to the left.
+     */
     void shiftLeft(int xCo, int yCo){
         if(xCo > 0){
             for(int i=xCo; i<x; i++){
@@ -335,12 +418,18 @@ class StringTable {
         }
     }
 
+    /*
+     * StringTable.deleteColumn method: Delete a given column.
+     */
     void deleteColumn(int column){
         for(int i=0; i<y; i++)
             shiftLeft(column + 1, i);
         deleteLastColumn();
     }
 
+    /*
+     * StringTable.deleteRow method: Delete a given row.
+     */
     void deleteRow(int row){
         for(int i=0; i<x; i++)
             shiftUp(row + 1, i);
@@ -357,6 +446,10 @@ class StringTable {
 
 }
 
+/*
+ * IntTable class: Same as StringTable class, just with integers instead of
+ * strings. It also has a couple of math metmods.
+ */
 class IntTable {
     int[][] Arr;
     private int x, y;
@@ -387,28 +480,37 @@ class IntTable {
         }
     }
 
+    /*
+     * IntTable.rowSum method: Add all the values in one row together.
+     */
     int rowSum(int row){
         int sum=0;
-        for(int i=0; i<row; i++){
+        for(int i=0; i<x; i++){
             sum += Arr[i][row];
         }
         return sum;
     }
 
+    /*
+     * IntTable.columnSum method: Add all the values in one column together.
+     */
     int columnSum(int column){
         int sum=0;
-        for(int i=0; i<column; i++){
+        for(int i=0; i<y; i++){
             sum += Arr[column][i];
         }
         return sum;
     }
 
+    /*
+     * IntTable.sum method: Add all the values in the table together.
+     */
     int sum(){
-        int sum=0;
+        int total=0;
         for (int i=0; i<y; i++){
-            sum += rowSum(i);
+            total += rowSum(i);
         }
-        return sum;
+        return total;
     }
 
     void deleteLastRow(){
