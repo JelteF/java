@@ -193,12 +193,12 @@ public class Assignment5 {
             whichLoser = 0;
             for(int j=0; j<intCandidates.getX(); j++){
                 if(losers.Arr[whichLoser]==j){
-                    if(intCandidates.Arr[j][0]<leastVotes){
+                    if(intCandidates.Arr[j][i]<leastVotes){
                         leastVotes = intCandidates.Arr[j][0];
                         losers.Arr[0] = j;
                         amntLosers = 1;
                     }
-                    else if(intCandidates.Arr[j][0]==leastVotes){
+                    else if(intCandidates.Arr[j][i]==leastVotes){
                         losers.Arr[amntLosers] = j;
                         amntLosers++;
                     }
