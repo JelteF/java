@@ -2,10 +2,10 @@ import java.util.*;
 
 public class Assignment7{
     public static void main(String[] args){
-        Set a = new Set(20, 1);
+        Set a = new Set(20, 1, 1, 100);
         System.out.println("Set A:\n" + a + "\n");
 
-        Set b = new Set(25, 3);
+        Set b = new Set(25, 3, 1, 100);
         System.out.println("Set B:\n" + b + "\n");
 
         System.out.println("A is a partial set of B: " + a.partialSetOf(b) + "\n");
@@ -23,14 +23,19 @@ public class Assignment7{
 
 class Set{
     private int size;
-    private int start = 1, end = 100, maxSize = end-start+1;
+    private int start, end, maxSize;
     int[] elements;
 
     Set(){}
-    Set(int size, int seed){
+    Set(int size, int seed, int start, int end){
         elements = new int[size];
         this.size=size;
+        this.start = start;
+        this.end = end;
+        maxSize = start+end-1;
+        if(size>maxSize){
 
+        }
         Random randomGenerator = new Random(seed);
         int[] randomArray= new int[maxSize];
         for(int i=0; i<maxSize; i++)
@@ -48,6 +53,11 @@ class Set{
         this.elements = elements;
         size = elements.length;
         sort();
+        start = this.elements[0];
+        end = this.elements[size-1];
+        maxSize = start+end-1;
+
+
     }
 
     void sort(){
