@@ -39,7 +39,7 @@ public class Assignment8{
             if(month == 2 && day==29 && !schrikkel(i))
                 continue;
             if(weekday(day, month, i)==0)
-                System.out.print(i + "   ");
+                System.out.print(i + " ");
 
         }
     }
