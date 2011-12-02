@@ -1,11 +1,26 @@
+/*
+ * Name: Jelte Fennema
+ * Studentnumber: 10183159
+ * Study: Informatica
+ *
+ * Functionality:
+ * The program must be able to create sets and perform a couple of functions on
+ * it.
+ */
+
+
 import java.util.*;
 
 public class Assignment7{
+    /*
+     * main method: call the different Set methods to check if they work 
+     * correctly.
+     */
     public static void main(String[] args){
-        Set a = new Set(20, 1, 1, 100);
+        Set a = new Set(new int[] {1, 2, 3 } );
         System.out.println("Set A:\n" + a + "\n");
 
-        Set b = new Set(25, 3, 1, 100);
+        Set b = new Set(new int[] {3, 4, 5});
         System.out.println("Set B:\n" + b + "\n");
 
         System.out.println("A is a partial set of B: " + a.partialSetOf(b) + "\n");
@@ -21,9 +36,12 @@ public class Assignment7{
     }
 }
 
+/*
+ * Set class: A class that contains a set of numbers.
+ */
 class Set{
     private int size;
-    private int start, end, maxSize;
+    private int start, end, maxSize = 100;
     int[] elements;
 
     Set(){}
@@ -32,7 +50,7 @@ class Set{
         this.size=size;
         this.start = start;
         this.end = end;
-        maxSize = start+end-1;
+//        maxSize = start+end-1;
         if(size>maxSize){
 
         }
@@ -55,11 +73,13 @@ class Set{
         sort();
         start = this.elements[0];
         end = this.elements[size-1];
-        maxSize = start+end-1;
+//        maxSize = start+end-1;
 
 
     }
-
+    /*
+     * sort method: Sort the set using a bubble sort.
+     */
     void sort(){
         boolean exchanged = true;
         int checkSize = size;
@@ -76,24 +96,31 @@ class Set{
             checkSize--;
         }
     }
-
+    
+    /*
+     * toString method: a method that overrides the standard toString method
+     * for an Object and prints the set.
+     */
     @Override public String toString(){
         String output= "{";
         for(int i=0; i<size-1; i++)
             output += elements[i] + ", ";
-        if(size>1)
+        if(size>0)
             output += elements[size-1];
         output += "}";
         return output;
     }
 
+    /*
+     * partialSetOf method: Checks if the set is a partial array of the set that
+     * is passed as a parameter.
+     */
     boolean partialSetOf(Set s){
         if(this.size>s.size)
             return false;
         int lastHit = 0;
         for(int i=0; i<this.size; i++){
             for(int j=lastHit; j<s.size; j++){
-                System.out.println(s.size-this.size+i);
                 if(j>=s.size-this.size+i)
                     return false;
                 if(this.elements[i]==s.elements[j]){
@@ -106,6 +133,10 @@ class Set{
         return true;
     }
 
+    /*
+     * intersection method: returns a set that is the intersection of the two
+     * sets.
+     */
     Set intersection(Set s){
         Set small, big;
         if(this.size<s.size){
@@ -135,6 +166,9 @@ class Set{
         return new Set(intersect);
     }
 
+    /*
+     * union method: returns a set that is the union of the two given sets.
+     */
     Set union(Set s){
         int[] temp = new int[this.size + s.size];
         Set small, big;
@@ -167,12 +201,14 @@ class Set{
                 hits++;
             }
         }
-        System.out.println();
         int[] unionArr = new int[small.size + hits];
         System.arraycopy(temp, 0, unionArr, 0, unionArr.length);
         return new Set(unionArr);
     }
 
+    /*
+     * complement method: returns a set that is the complement of the set.
+     */
     Set complement(){
         int[] comp = new int[maxSize-size];
         int lastHit=0;
